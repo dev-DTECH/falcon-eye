@@ -1,0 +1,8 @@
+https://github.com/airtlab/A-Dataset-for-Automatic-Violence-Detection-in-Videos
+https://www.kaggle.com/datasets/mohamedmustafa/real-life-violence-situations-dataset
+https://github.com/mchengny/RWF2000-Video-Database-for-Violence-Detection
+https://www.kaggle.com/datasets/toluwaniaremu/smartcity-cctv-violence-detection-dataset-scvd
+https://www.kaggle.com/code/abduulrahmankhalid/real-time-violence-detection-mobilenet-bi-lstm#Visualize-the-Data
+https://github.com/mamonraab/Real-Time-Violence-Detection-in-Video-
+ESRORAD dataset
+pallete - https://colorhunt.co/palette/2c2e43595260b2b1b9ffd523

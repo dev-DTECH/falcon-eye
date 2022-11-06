@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #2C2E43;
+}
+
+.logo {
+    display: flex;
+    font-family: 'Black Ops One';
+    font-size: 50px;
+    color: white;
+    padding: 5px;
+    gap: 20px;
+    justify-content: center;
+}
+
+.logo div {
+    display: flex;
+
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #B2B1B9;
+}
+
+main {
+    height: 0;
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.videos {
+    grid-column-end: span 2;
+    grid-row-end: span 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.videos > #live-video {
+    width: 50%;
+    border: solid red 2px;
+}
+
+.videos > .clip-video {
+    width: 50%;
+}
+
+.clips {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    grid-row-end: span 3;
+    background: #595260;
+}
+
+.clip-container {
+    /*min-height: 100%;*/
+    /*max-height: 80vh;*/
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.alerts {
+    grid-row-start: 3;
+    grid-column-start: 1;
+    display: flex;
+    border-radius: 10px;
+    background: #595260;
+    font-family: 'Black Ops One';
+    font-size: larger;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alerts > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #B2B1B9;
+    margin: 20px;
+    padding: 20px;
+    min-height: 112px;
+    border-radius: 10px;
+}
+
+.alert-logs {
+    color: white;
+}
+
+.alert-logs > header {
+    font-family: 'Black Ops One';
+    font-size: x-large;
+    background: #595260;
+    border-radius: 10px;
+    padding: 10px;
+    margin: auto;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+}
+
+.alert {
+    animation: alert 4s linear 0s 1 alternate;
+}
+
+.search-clip {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.clip {
+    width: 90%;
+    padding: 20px;
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.log >nobr {
+    color: black;
+    /*background: white;*/
+    margin: 5px;
+    padding: 5px;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    /*width: 500px;*/
+}
+.log-container{
+    overflow-y: scroll;
+    height: 26vh;
+}
+.log > nobr > div {
+    margin: 2px;
+    padding: 2px;
+    border-radius: 5px;
+    width: min-content;
+}
+.log-red {
+    background: rgba(255, 0, 0, 0.1);
+    border: solid red;
+}
+
+.log-blue {
+    background: rgba(0, 0, 255, 0.1);
+    border: solid blue;
+
+}
+
+.log-yellow {
+    background: rgba(255, 255, 0, 0.1);
+    border: solid yellow;
+}
+
+@keyframes alert {
+    0% {
+        background-color: red;
+        box-shadow: 0 0 20px 5px red;
+    }
+    10% {
+        background-color: red;
+        box-shadow: 0 0 20px 5px red;
+
+    }
+    20% {
+        background-color: #B2B1B9;
+        box-shadow: none;
+    }
+    30% {
+        box-shadow: 0 0 20px 5px red;
+        background-color: red;
+    }
+    40% {
+        box-shadow: 0 0 20px 5px red;
+        background-color: red;
+    }
+    50% {
+        background-color: #B2B1B9;
+        box-shadow: none;
+    }
+    60% {
+        box-shadow: 0 0 20px 5px red;
+        background-color: red;
+    }
+    70% {
+        box-shadow: 0 0 20px 5px red;
+        background-color: red;
+    }
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>🦅Falcon Eye</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+<header>
+    <div class="logo">
+        <img height="60" src="/logo.png" alt="logo">
+        <div class="logo-text">Falcon Eye</div>
+    </div>
+</header>
+<main>
+    <!-- <img height="500" id="live-video" src="video_feed"> -->
+    <div class="videos">
+        <img height="500" id="live-video" src="/video_feed">
+        <video src="" alt="Video Clips will be shown here" class="clip-video" controls></video>
+    </div>
+    <div class="clips">
+        <form class="search-clip">
+            <input type="text" class="search-text" placeholder="search">
+        </form>
+        <div class="clip-container">
+        </div>
+    </div>
+    <div class="alert-logs">
+        <header>Alerts</header>
+        <div class="log-container">
+
+
+        </div>
+    </div>
+    <div class="alerts">
+        <div class="alert-violence">Violence</div>
+        <div class="alert-tamper">Tamper</div>
+        <div class="alert-person-on-track">Person on Track</div>
+        <div class="alert-person-on-ra">Person on Restricted Area</div>
+
+    </div>
+</main>
+<script type="text/javascript" charset="utf-8">
+    let clips = [];
+    let detection = [];
+
+    function httpGetAsync(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true); // true for asynchronous
+        xmlHttp.send(null);
+    }
+
+    let ra_time = (new Date()).getTime();
+    let track_time = (new Date()).getTime();
+    let tamper_time = (new Date()).getTime();
+    let violence_time = (new Date()).getTime();
+
+    setInterval(() => {
+        httpGetAsync("/detection", data => {
+            detection = JSON.parse(data)
+            let roi_ra = false, roi_track = false;
+            let logs = document.querySelector(".log-container")
+            var date = new Date();
+            var current_time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+            let log_html = `
+            <div class="log">
+                <nobr>
+                    <div class="time">[${current_time}]</div>
+                    ${detection.violence ? `<div class="log-red">Violence</div>` : ""}
+                    ${detection.tamper ? `<div class="log-blue">CCTV Tamper</div>` : ""}`
+            for (let i = 0; i < detection.roi.length; i++) {
+                if (detection.roi[i].type == "ra") {
+
+                    log_html += `<div class="log-yellow">${detection.roi[i].ob} on ${detection.roi[i].area}</div>`
+                    roi_ra = true
+
+                }
+                if (detection.roi[i].type == "track") {
+
+                    log_html += `<div class="log-red">${detection.roi[i].ob} on ${detection.roi[i].area}</div>`
+                    roi_track = true
+
+                }
+            }
+
+            log_html += `
+                </nobr>
+            </div>
+`
+            if (detection.roi.length != 0 || detection.violence || detection.tamper == 1) {
+                logs.innerHTML += log_html
+                logs.scrollTo(0, logs.scrollHeight);
+
+            }
+            if (roi_ra && ((((new Date()).getTime() - ra_time) / 1000) > 5)) {
+                ra_time = (new Date()).getTime()
+                start_alert(".alert-person-on-ra")
+            }
+            if (roi_track && ((((new Date()).getTime() - track_time) / 1000) > 5)) {
+                track_time = (new Date()).getTime();
+                start_alert(".alert-person-on-track")
+            }
+            if (detection.violence && ((((new Date()).getTime() - violence_time) / 1000) > 5)) {
+                violence_time = (new Date()).getTime();
+                start_alert(".alert-violence")
+            }
+            if (detection.tamper && ((((new Date()).getTime() - tamper_time) / 1000) > 5)) {
+                tamper_time = (new Date()).getTime();
+                start_alert(".alert-tamper")
+            }
+            console.log(JSON.parse(data))
+        })
+
+    }, 1000)
+    httpGetAsync("/clips", data => {
+        clips = JSON.parse(data)
+        update_clips()
+        {#console.log(JSON.parse(data))#}
+    })
+    setInterval(() => {
+        httpGetAsync("/clips", data => {
+            clips = JSON.parse(data)
+            update_clips()
+            {#console.log(JSON.parse(data))#}
+        })
+    }, 30000)
+
+</script>
+<script src="/js/main.js"></script>
+</body>
+
+</html>
