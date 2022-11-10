@@ -1,6 +1,7 @@
 import os
 import sys
 import time, threading
+import moviepy.editor as moviepy
 
 import json
 from collections import deque
@@ -18,7 +19,7 @@ import tensorflow as tf
 from EasyROI import EasyROI
 
 # Config
-CONFIG = {"debug": True, "prediction": {"violence": True, "tamper": True, "roi": True}, "clip-time": 30}
+CONFIG = {"debug": False, "prediction": {"violence": True, "tamper": True, "roi": True}, "clip-time": 30}
 IMAGE_HEIGHT, IMAGE_WIDTH = 128, 128
 # Specify the number of frames of a video that will be fed to the model as one sequence.
 SEQUENCE_LENGTH = 128
@@ -32,8 +33,8 @@ outputFrame = None
 lock = threading.Lock()
 # video = VideoStream(src=0).start()
 # video = FileVideoStream("/home/dtech/Documents/git/falcon-eye/test-rail.mp4").start()
-video = FileVideoStream("/home/dtech/Documents/git/falcon-eye/V_19.mp4").start()
-# video = FileVideoStream("/home/dtech/Documents/git/falcon-eye/rail3.mp4").start()
+# video = FileVideoStream("/home/dtech/Documents/git/falcon-eye/V_19.mp4").start()
+video = FileVideoStream("/home/dtech/Documents/git/falcon-eye/rail3.mp4").start()
 
 fgbg = cv2.createBackgroundSubtractorMOG2()
 frame = video.read()
@@ -126,8 +127,8 @@ def predict_tamper(frame):
 
 def falcon_eye():
     global video, outputFrame, lock, video_clip_time_start
-    video_clip_file = cv2.VideoWriter(f'static/clip/{time.ctime().replace(" ", "_")}.avi',
-                                      cv2.VideoWriter_fourcc(*'XVID'),
+    video_clip_file = cv2.VideoWriter(f'static/clip/{time.ctime().replace(" ", "_")}.webm',
+                                      cv2.VideoWriter_fourcc(*"vp80"),
                                       10, (500, 500))
 
     # video = getMotionInfuenceMap(video)
@@ -140,11 +141,11 @@ def falcon_eye():
             if detection["violence"] == 1 or detection["roi"] != [] or detection["tamper"] == 1:
                 video_clip_file.release()
                 if (CONFIG["debug"]):
-                    print(f'[FalconEye:{time.ctime()}] Clip saved: "{time.ctime().replace(" ", "_")}.avi"')
+                    print(f'[FalconEye:{time.ctime()}] Clip saved: "{time.ctime().replace(" ", "_")}.mp4"')
 
             video_clip_time_start = time.time()
-            video_clip_file = cv2.VideoWriter(f'static/clip/{time.ctime().replace(" ", "_")}.avi',
-                                              cv2.VideoWriter_fourcc(*'XVID'),
+            video_clip_file = cv2.VideoWriter(f'static/clip/{time.ctime().replace(" ", "_")}.webm',
+                                              cv2.VideoWriter_fourcc(*"vp80"),
                                               10, (500, 500))
 
         # if (not ok):
@@ -224,6 +225,11 @@ def video_feed():
 
 @app.route('/detection')
 def REST_detection():
+    # clip_list = os.listdir("static/clip")
+    # for clip in clip_list:
+    #     if clip.split(".")[1] == "avi":
+    #         vid = moviepy.VideoFileClip("static/clip/" + clip)
+    #         vid.write_videofile(("static/clip/" + clip).replace(".avi", ".mp4"))
     return jsonify(detection)
 
 

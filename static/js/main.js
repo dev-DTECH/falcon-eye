@@ -21,6 +21,7 @@ function update_clip_url(url){
     let ele=document.querySelector(".clip-video")
     ele.src=`/clip/${url}`
     ele.play()
+    ele.height="500"
 }
 function update_clips() {
     let clips_ele = document.querySelector(".clip-container")
